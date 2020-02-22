@@ -14,6 +14,14 @@ use ReflectionClass;
 
 class Logger implements LoggerInterface
 {
+    private $logPath;
+    private $env;
+
+    public function __construct(string $logPath, string $env)
+    {
+        $this->logPath = $logPath;
+        $this->env = $env;
+    }
 
     /**
      * System is unusable.
@@ -160,14 +168,8 @@ class Logger implements LoggerInterface
     private function addRecord(string $level, string $message, array $context = [])
     {
         $date = (new DateTimeImmutable('now', new DateTimeZone('Europe/London')))->format('Y-m-d H:i:s');
-        try {
-            $path = Config::get('app.log.path');
-            $env = Config::get('app.env');
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
         $content = sprintf("%s - Level: %s - Message: %s - Context: %s", $date, $level, $message, json_encode($context)).PHP_EOL;
-        $file = sprintf("%s".DIRECTORY_SEPARATOR."%s-%s.log", $path, $env, date("d-m-Y"));
+        $file = sprintf("%s".DIRECTORY_SEPARATOR."%s-%s.log", $this->logPath, $this->env, date("d-m-Y"));
         file_put_contents($file, $content, FILE_APPEND);
     }
 }
