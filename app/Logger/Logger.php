@@ -2,11 +2,8 @@
 
 namespace App\Logger;
 
-
-use App\Utility\Config;
 use DateTimeImmutable;
 use DateTimeZone;
-use Exception;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
